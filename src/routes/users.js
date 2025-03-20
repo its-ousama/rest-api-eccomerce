@@ -8,8 +8,14 @@ router.get("/", (req, res) => {
 
 
 router.post("/", (req, res) => {
-  res.send("User data received");
+  const { firstName, email, password } = req.body
+  res.json({
+    firstName,
+    email,
+    password,
+    _id: "randomId4567",
+   })
+  console.log({firstName, email, password});
 });
-
 
 module.exports = router;
