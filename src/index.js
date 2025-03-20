@@ -1,13 +1,10 @@
 const express = require("express");
+const userRoutes = require("./routes/users")
 const app = express();
 const port = 3000;
 
-// Middleware to calculate an arithmetic value and pass it to the request object
-app.use((req, res, next) => {
-    req.calculatedValue = 4 * 7; // example
-    console.log(`Calculated Value: ${req.calculatedValue}`);
-    next();
-});
+app.use(express.json())
+
 
 // Middleware to log the response before sending it to the user
 app.use((req, res, next) => {
@@ -19,9 +16,14 @@ app.use((req, res, next) => {
     next();
 });
 
+
+// ROUTES
+app.use("/api/users", userRoutes)
+
+
 app.get("/", (req, res) => {
-    res.send(`Hello World! The calculated value is ${req.calculatedValue}`);
-});
+    res.send("Welcome to my API ! e-commerce backed 🤳")
+   })
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
