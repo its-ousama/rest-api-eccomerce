@@ -1,20 +1,23 @@
 const express = require("express");
-const userRoutes = require("./routes/users")
+const userRoutes = require("./routes/users");
+const connectDB = require("./utils/db");
 const app = express();
 const port = 3000;
+
 
 app.use(express.json())
 
 
-// Middleware to log the response before sending it to the user
 app.use((req, res, next) => {
-    const originalSend = res.send;
-    res.send = function (body) {
-        console.log("Response to user:", body);
-        originalSend.call(this, body);
-    };
-    next();
-});
+    res.header("Access-Control-Allow-Origin", "*")
+    res.header(
+     "Access-Control-Allow-Headers",
+     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    )
+    next()
+   })
+
+connectDB()
 
 
 // ROUTES
