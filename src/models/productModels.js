@@ -42,4 +42,4 @@ const productSchema= new mongoose.Schema({
 
 productSchema.plugin(uniqueValidator)
 
-module.exports = mongoose.model("productSchema", productSchema)
+module.exports = mongoose.model("Product", productSchema)

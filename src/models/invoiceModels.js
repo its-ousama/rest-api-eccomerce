@@ -27,4 +27,4 @@ const invoiceSchema= new mongoose.Schema({
 
 invoiceSchema.plugin(uniqueValidator)
 
-module.exports = mongoose.model("invoiceSchema", invoiceSchema)
+module.exports = mongoose.model("Invoice", invoiceSchema)

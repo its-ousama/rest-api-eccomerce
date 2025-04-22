@@ -1,26 +1,72 @@
-const jwt = require("jsonwebtoken")
 const User = require("../models/userModels")
+const jwt = require("jsonwebtoken")
 
-exports.verifyToken = async (req, res, next) => {
-    // Check if the authorization header exists
+exports.verifyToken = async (req, res, next) =>{
     if (!req.headers.authorization) {
-      return res.status(403).send({ message: "No token provided!" })
+        return res.status(403).send({ message: "No token provided!" });
     }
-  
+
     try {
-      const token = req.headers.authorization.split(" ")[1]
-      // Verify the token
-      const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN_KEY)
-      req.userId = decodedToken.userId
-  
-      // Check if the user exists in the database
-      const user = await User.findById(req.userId)
-      if (!user) {
-        return res.status(404).json({ message: "User not found" })
-      }
-      next()
+        const token = req.headers.authorization.split(" ")[1];
+        const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN_KEY);
+        req.userId = decodedToken.userId;
+        const user= await User.findById(req.userId)
+        
+        if (!user){
+            return res.status(404).send({ message: "User not found!" });
+        }
+
+        req.userRole = user.role;
+        next();
     } catch (err) {
-      return res.status(401).send({ message: "Unauthorized!" })
+        return res.status(401).send({ message: "Unauthorized!" });
     }
-  }
-  
+}
+
+exports.verifyAdmin = async (req, res, next) => {
+    if (!req.headers.authorization) {
+        return res.status(403).send({ message: "No token provided!" });
+    }
+
+    try {
+        const token = req.headers.authorization.split(" ")[1];
+        const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN_KEY);
+        req.userId = decodedToken.userId;
+        const user = await User.findById(req.userId);
+        
+        if (!user) {
+            return res.status(404).send({ message: "User not found!" });
+        }
+
+        if (user.role !== "admin") {
+            return res.status(403).send({ message: "Access denied. Admins only!" });
+        }
+
+        req.userRole = user.role;
+        next();
+    } catch (err) {
+        return res.status(401).send({ message: "Unauthorized!" });
+    }
+};
+
+exports.verifyUser = async (req, res, next) => {
+    if (!req.headers.authorization) {
+        return res.status(403).send({ message: "No token provided!" });
+    }
+
+    try {
+        const token = req.headers.authorization.split(" ")[1];
+        const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN_KEY);
+        req.userId = decodedToken.userId;
+
+        // Check if user exists
+        const user = await User.findById(req.userId);
+        if (!user) {
+            return res.status(404).send({ message: "User not found!" });
+        }
+
+        next();
+    } catch (err) {
+        return res.status(401).send({ message: "Unauthorized!" });
+    }
+};

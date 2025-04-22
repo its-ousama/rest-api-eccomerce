@@ -1,6 +1,9 @@
 const express = require("express");
 const userRoutes = require("./routes/users");
 const connectDB = require("./utils/db");
+const productRoutes = require("./routes/products")
+const invoiceRoutes = require("./routes/invoices")
+
 const app = express();
 const port = 3000;
 const path = require("path")
@@ -24,6 +27,8 @@ connectDB()
 
 // ROUTES
 app.use("/api/users", userRoutes)
+app.use("/api/products", productRoutes)
+app.use("/api/invoices", invoiceRoutes)
 
 
 app.get("/", (req, res) => {
@@ -33,4 +38,3 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
 });
-
