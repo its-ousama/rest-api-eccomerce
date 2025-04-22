@@ -1,47 +1,45 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
-const userSchema= new mongoose.Schema({
-    firstName: {
+const productSchema= new mongoose.Schema({
+    productName: {
         type: String,
         required: true,
     },
 
-    lastName: {
+    productDescription: {
         type: String,
         required: true,
     },
-
+    
     imageUrl: {
         type: Buffer,
         required: true
     },
 
-    email: {
-        type: String,
-        required: true,
-        unique: true
-    },
-
-    password: {
+    brand: {
         type: String,
         required: true
     },
 
-    role: {
+    model: {
         type: String,
-        enum: ['user', 'admin'],
-        default: 'user',
         required: true
     },
 
-    inventory: {
-        type: Array,
-        required: false
-    }
+    stock: {
+        type: Number,
+        required: true
+    },
+
+    price: {
+        type: Number,
+        required: true
+    },
 },
+
 {timestamps: true}
 )
 
-userSchema.plugin(uniqueValidator)
+productSchema.plugin(uniqueValidator)
 
-module.exports = mongoose.model("userSchema", userSchema)
+module.exports = mongoose.model("productSchema", productSchema)
