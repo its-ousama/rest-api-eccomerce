@@ -5,7 +5,7 @@ const { verifyAdmin } = require("../middleware/auth");
 const upload = require("../middleware/multerConfig");
 const sharpMiddleware = require("../middleware/sharpMiddleware");
 
-router.get('/seeProduct', getProduct);
+router.get('/', getProduct);
 
 router.post(
   '/addProduct',

@@ -21,7 +21,15 @@ exports.userLogin = async (req, res) => {
             process.env.SECRET_TOKEN_KEY,
             { expiresIn: "24h"}
         )
-        res.status(200).json(token)
+        res.status(200).json({
+            message: "Login successful",
+            token,
+            user: {
+              email: foundUser.email,
+              firstName: foundUser.firstName,
+              role: foundUser.role,
+            },
+          });
     }
     catch (err) {
         res.status(401).json({ 
@@ -31,23 +39,23 @@ exports.userLogin = async (req, res) => {
 };
 
 exports.userSignUp = async (req, res) => {
-    const { firstName, email, lastName, imageUrl, role } = req.body
-    const hashedPassword = req.hashedPassword
+    const { firstName, lastName, email, password } = req.body;
+    const hashedPassword = req.hashedPassword;
+  
     try {
-    const newUser = new User({
+      const newUser = new User({
         firstName,
+        lastName,
         email,
         password: hashedPassword,
-        lastName,
-        imageUrl,
-        role,
-        inventory: [],
-    })
-    const savedUser = await newUser.save()
-    res.status(201).json(savedUser)
-} catch (err) {
-    res.status(400).json({
-        message: err.message
-    })
-}
-}
+        role: "user",       
+        inventory: [],      
+      });
+  
+      const savedUser = await newUser.save();
+      res.status(201).json({ message: "User registered", user: savedUser });
+    } catch (error) {
+      console.error("Signup error:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+};
