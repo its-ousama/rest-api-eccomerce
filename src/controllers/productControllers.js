@@ -17,13 +17,13 @@ exports.addProduct = async (req, res) => {
         return res.status(400).json({ message: "Image upload or processing failed." });
       }
   
-      const imageUrl = `https://rest-api-eccomerce-backend.onrender.com/${req.file.processedPath}`;
+      const result = await cloudinary.uploader.upload(req.file.path);
   
       const newProduct = new Product({
         productName,
         productDescription,
         brand,
-        imageUrl, 
+        imageUrl:  result.secure_url, 
         model,
         stock,
         price,
