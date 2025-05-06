@@ -13,9 +13,8 @@ router.post(
   upload.single("image"),
   sharpMiddleware(),
   (req, res, next) => {
-    // Add image path to req.body before passing to controller
     if (req.file && req.file.processedPath) {
-      req.body.imageUrl = req.protocol + "://" + req.get("host") + "/" + req.file.processedPath;
+      req.body.imageUrl = `https://rest-api-eccomerce-backend.onrender.com/${req.file.processedPath}`;
     }
     next();
   },
