@@ -17,7 +17,7 @@ exports.addProduct = async (req, res) => {
         return res.status(400).json({ message: "Image upload or processing failed." });
       }
   
-      const imageUrl = req.body.imageUrl || [] 
+      const imageUrl = `https://rest-api-eccomerce-backend.onrender.com/${req.file.processedPath}`;
   
       const newProduct = new Product({
         productName,
